@@ -1,0 +1,56 @@
+<ion-view view-title="Add User">
+    <ion-content>
+        <div class="main-ear text-center">
+            <div class="ear-div">
+                <img src="img/user.jpg" class="user-img">
+            </div>
+            <button class="button button-stable upload">
+                Add Profile Picture
+            </button>
+        </div>
+        <div class="ear-div">
+            <form ng-submit="doLogin()">
+                <div class="list">
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">Name</span>
+                        <input type="text" placeholder="Name">
+                    </label>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">Age</span>
+                        <input type="tel" placeholder="Age">
+                    </label>
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Blood Group
+                        </div>
+                        <select>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </label>
+                    <label class="item item-input item-floating-label">
+                        <span class="input-label">Contact Number</span>
+                        <input type="tel" placeholder="Contact Number">
+                    </label>
+                    <div class="main-ear text-center">
+                        <div class="ear-div">
+                            <img src="img/ear.jpg" class="ear-img">
+                        </div>
+                        <button class="button button-stable upload">
+                            Add Ear Image
+                        </button>
+                    </div>
+                    <label class="item" style="border:none;">
+                        <button class="button button-block button-stable">Submit User</button>
+                    </label>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>
