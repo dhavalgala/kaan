@@ -54,6 +54,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
     })
 
+    .state('app.allusers', {
+        url: '/allusers',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/allusers.html',
+                controller: 'AllUsersCtrl'
+            }
+        }
+    })
+
     .state('app.addnew', {
         url: '/addnew',
         views: {

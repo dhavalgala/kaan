@@ -1,0 +1,14 @@
+<ion-view view-title="Users">
+    <ion-content>
+        <div class="list">
+            <a class="item item-thumbnail-left" href="" ng-repeat="user in allUsers">
+                <img ng-src="{{user.image}}">
+                <h2>{{user.name}}</h2>
+                <p>{{user.age}}</p>
+                <p>{{user.bloodgrp}}</p>
+                <p>{{user.contact}}</p>
+                <img ng-src="{{user.earimg}}">
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

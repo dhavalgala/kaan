@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ngCordova'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $state) {
 
@@ -10,26 +10,21 @@ angular.module('starter.controllers', [])
     //});
 })
 
-.controller('SearchCtrl', function($scope) {
-    $scope.playlists = [{
-        title: 'Reggae',
-        id: 1
-    }, {
-        title: 'Chill',
-        id: 2
-    }, {
-        title: 'Dubstep',
-        id: 3
-    }, {
-        title: 'Indie',
-        id: 4
-    }, {
-        title: 'Rap',
-        id: 5
-    }, {
-        title: 'Cowbell',
-        id: 6
-    }];
+.controller('SearchCtrl', function($scope, $cordovaCamera) {
+
+    $scope.captureImage = function() {
+        var options = {
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+            console.log(imageData);
+        }, function(err) {
+            // error
+        });
+    }
+
 })
 
 .controller('LoginCtrl', function($scope, $stateParams, $state) {
@@ -39,5 +34,32 @@ angular.module('starter.controllers', [])
 })
 
 .controller('AddNewCtrl', function($scope, $stateParams, $state) {
+
+})
+
+.controller('AllUsersCtrl', function($scope, $stateParams, $state) {
+
+    $scope.allUsers = [{
+        name: "John Adams",
+        age: "23 yrs",
+        bloodgrp: "O+",
+        contact: "+91 9877899877",
+        image: "img/user.jpg",
+        earimg: "img/ear3.jpg"
+    }, {
+        name: "Alyssa Faith",
+        age: "20 yrs",
+        bloodgrp: "B+",
+        contact: "+91 9877899877",
+        image: "img/user2.jpg",
+        earimg: "img/ear1.jpg"
+    }, {
+        name: "Peter Wilson",
+        age: "26 yrs",
+        bloodgrp: "AB+",
+        contact: "+91 9877899877",
+        image: "img/user3.jpg",
+        earimg: "img/ear2.jpeg"
+    }];
 
 });

@@ -1,21 +1,21 @@
 <ion-view view-title="Search">
-  <ion-content ng-init="details=false;">
-    <div class="main-ear text-center">
-      <div class="ear-div">
-        <img src="img/ear.jpg" class="ear-img">
-      </div>
-      <button class="button button-block button-stable" ng-click="details=!details">
-        Capture Image
-      </button>
-    </div>
-    <div class="list" ng-show="details">
-      <a class="item item-thumbnail-left" href="#">
-        <img src="img/user.jpg">
-        <h2>John Adams</h2>
-        <p>24 yrs</p>
-        <p>O+</p>
-        <p>+91 9877899877</p>
-      </a>
-    </div>
-  </ion-content>
+    <ion-content ng-init="details=false;">
+        <div class="main-ear text-center">
+            <div class="ear-div">
+                <img src="img/ear.jpg" class="ear-img">
+            </div>
+            <button class="button button-block button-stable" ng-click="details=!details;captureImage();">
+                Capture Image
+            </button>
+        </div>
+        <div class="list" ng-show="details">
+            <a class="item item-thumbnail-left" href="">
+                <img src="img/user.jpg">
+                <h2>John Adams</h2>
+                <p>24 yrs</p>
+                <p>O+</p>
+                <p>+91 9877899877</p>
+            </a>
+        </div>
+    </ion-content>
 </ion-view>

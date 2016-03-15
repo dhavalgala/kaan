@@ -96,3 +96,28 @@ img.img-responsive {
     height: 125px;
     border-radius: 100%;
 }
+.item-thumbnail-left > img:first-child,
+.item-thumbnail-left .item-image,
+.item-thumbnail-left .item-content > img:first-child,
+.item-thumbnail-left .item-content .item-image {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 80px;
+    max-height: 80px;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%
+}
+.item-thumbnail-left > img:last-child,
+.item-thumbnail-left .item-image,
+.item-thumbnail-left .item-content > img:last-child,
+.item-thumbnail-left .item-content .item-image {
+    position: absolute;
+    top: 10px;
+    left: 75%;
+    max-width: 80px;
+    max-height: 80px;
+    width: 100%;
+    height: 100%;
+}
