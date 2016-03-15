@@ -12,6 +12,8 @@ angular.module('starter.controllers', ['ngCordova'])
 
 .controller('SearchCtrl', function($scope, $cordovaCamera) {
 
+    $scope.earImage = "img/ear.jpg";
+
     $scope.captureImage = function() {
         var options = {
             destinationType: Camera.DestinationType.FILE_URI,
@@ -22,6 +24,7 @@ angular.module('starter.controllers', ['ngCordova'])
             // var image = document.getElementById('myImage');
             // image.src = imageURI;
             console.log(imageURI);
+            $scope.earImage = imageURI;
         }, function(err) {
             // error
         });

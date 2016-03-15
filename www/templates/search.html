@@ -2,7 +2,7 @@
     <ion-content ng-init="details=false;">
         <div class="main-ear text-center">
             <div class="ear-div">
-                <img src="img/ear.jpg" class="ear-img">
+                <img ng-src="{{earImage}}" class="ear-img">
             </div>
             <button class="button button-block button-stable" ng-click="details=!details;captureImage();">
                 Capture Image
