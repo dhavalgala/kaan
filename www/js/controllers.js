@@ -14,12 +14,14 @@ angular.module('starter.controllers', ['ngCordova'])
 
     $scope.captureImage = function() {
         var options = {
-            destinationType: Camera.DestinationType.DATA_URL,
-            sourceType: Camera.PictureSourceType.CAMERA
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.CAMERA,
         };
 
-        $cordovaCamera.getPicture(options).then(function(imageData) {
-            console.log(imageData);
+        $cordovaCamera.getPicture(options).then(function(imageURI) {
+            // var image = document.getElementById('myImage');
+            // image.src = imageURI;
+            console.log(imageURI);
         }, function(err) {
             // error
         });
