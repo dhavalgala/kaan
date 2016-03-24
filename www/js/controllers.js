@@ -1,18 +1,37 @@
+var allfunction = {};
 angular.module('starter.controllers', ['ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, $ionicPopup, $timeout, $ionicLoading) {
 
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
+    allfunction.msg = function(msg, title) {
+        var myPopup = $ionicPopup.show({
+            template: '<p class="text-center">' + msg + '!</p>',
+            title: title,
+            scope: $scope,
+        });
+        $timeout(function() {
+            myPopup.close(); //close the popup after 3 seconds for some reason
+        }, 3000);
+    };
+
+    allfunction.loading = function() {
+        $ionicLoading.show({
+            template: '<ion-spinner class="spinner-positive"></ion-spinner>'
+        });
+        $timeout(function() {
+            $ionicLoading.hide();
+        }, 10000);
+    };
+
 })
 
-.controller('SearchCtrl', function($scope, $cordovaCamera) {
+.controller('SearchCtrl', function($scope, $cordovaCamera, $state) {
 
-    $scope.earImage = "img/ear.jpg";
+    if (!$.jStorage.get("user")) {
+        $state.go("login");
+    }
+
+    $scope.earImage = "img/earid.png";
 
     $scope.captureImage = function() {
         var options = {
@@ -32,39 +51,188 @@ angular.module('starter.controllers', ['ngCordova'])
 
 })
 
-.controller('LoginCtrl', function($scope, $stateParams, $state) {
+.controller('LoginCtrl', function($scope, $stateParams, $state, $ionicPopup, $timeout, $ionicLoading, MyServices) {
+
+    $scope.register = {};
+    $scope.login = {};
+    $.jStorage.flush();
     $scope.doLogin = function() {
-        $state.go("app.search");
+        console.log($scope.login);
+        MyServices.login($scope.login, function(data) {
+            $ionicLoading.hide();
+            if (data.value != false) {
+                var myPopup = $ionicPopup.show({
+                    template: '<p class="text-center">Login Successfull</p>',
+                    title: 'Success'
+                });
+                $timeout(function() {
+                    myPopup.close(); //close the popup after 3 seconds for some reason
+                    $.jStorage.set("user", data);
+                    $state.go("app.search");
+                }, 3000);
+            } else {
+                var myPopup = $ionicPopup.show({
+                    template: '<p class="text-center">Invalid login credentials</p>',
+                    title: 'Error'
+                });
+                $timeout(function() {
+                    myPopup.close(); //close the popup after 3 seconds for some reason
+                }, 3000);
+            }
+        });
     };
+
+    $scope.doRegister = function() {
+        console.log($scope.register);
+        if ($scope.register.password === $scope.register.cpassword) {
+            $ionicLoading.show({
+                template: '<ion-spinner class="spinner-positive"></ion-spinner>'
+            });
+            delete $scope.register.cpassword;
+            MyServices.register($scope.register, function(data) {
+                $ionicLoading.hide();
+                if (data.value != false) {
+                    var myPopup = $ionicPopup.show({
+                        template: '<p class="text-center">Registration Successfull</p>',
+                        title: 'Success'
+                    });
+                    $timeout(function() {
+                        myPopup.close(); //close the popup after 3 seconds for some reason
+                        $.jStorage.set("user", data.comment);
+                        $state.go("app.search");
+                    }, 3000);
+                } else {
+                    var myPopup = $ionicPopup.show({
+                        template: '<p class="text-center">Email id already registered</p>',
+                        title: 'Error'
+                    });
+                    $timeout(function() {
+                        myPopup.close(); //close the popup after 3 seconds for some reason
+                    }, 3000);
+                }
+            })
+        } else {
+            var myPopup = $ionicPopup.show({
+                template: '<p class="text-center">Password Mismatch</p>',
+                title: 'Error'
+            });
+            $timeout(function() {
+                myPopup.close(); //close the popup after 3 seconds for some reason
+            }, 3000);
+        }
+        // $state.go("app.search");
+    };
+
 })
 
-.controller('AddNewCtrl', function($scope, $stateParams, $state) {
+.controller('AddNewCtrl', function($scope, $stateParams, $state, $cordovaCamera, $cordovaFileTransfer, $ionicLoading, MyServices) {
+
+    $scope.addUser = {};
+    // $scope.addUser.earimage = "f4f184ad-7b05-4298-baa2-74e4febeb7df.jpg";
+    // $scope.addUser.profilepic = "7ad375e9-a280-47fb-ad93-5bb944159e37.jpg";
+
+    $scope.saveUser = function() {
+        console.log($scope.addUser);
+        allfunction.loading();
+        MyServices.saveUser($scope.addUser, function(data) {
+            $ionicLoading.hide();
+            if (data.value != false) {
+                allfunction.msg("User Added Successfully", "Add User");
+                $scope.addUser = {};
+            }
+        });
+    }
+
+    $scope.uploadPic = function(whichone) {
+        var options = {};
+        var uploadIn = "";
+        if (whichone == 1) {
+            uploadIn = "profile";
+            options.destinationType = Camera.DestinationType.FILE_URI;
+            options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+        } else if (whichone == 2) {
+            uploadIn = "earImage";
+            options.destinationType = Camera.DestinationType.FILE_URI;
+            options.sourceType = Camera.PictureSourceType.CAMERA;
+        }
+        $cordovaCamera.getPicture(options).then(function(imageURI) {
+            // Success! Image data is here
+            console.log(imageURI);
+            $scope.imagetobeup = imageURI;
+            $scope.uploadPhoto(adminurl + "image/upload", uploadIn, function(data) {
+                console.log(data);
+                console.log(JSON.parse(data.response));
+                var json = JSON.parse(data.response);
+                if (json.value != false) {
+                    if (whichone == 1) {
+                        $scope.addUser.profilepic = json.files[0].fd;
+                    } else if (whichone == 2) {
+                        $scope.addUser.earimage = json.files[0].fd;
+                    }
+                }
+            });
+        }, function(err) {
+            // An error occured. Show a message to the user
+        });
+    }
+
+    $scope.uploadPhoto = function(serverpath, uploadIn, callback) {
+        console.log("function called");
+        var params = {};
+        params.path = uploadIn;
+
+        var options = {};
+        options.params = params;
+        $cordovaFileTransfer.upload(serverpath, $scope.imagetobeup, options)
+            .then(function(result) {
+                console.log(result);
+                callback(result);
+                $ionicLoading.hide();
+                //$scope.addretailer.store_image = $scope.filename2;
+            }, function(err) {
+                // Error
+                console.log(err);
+            }, function(progress) {
+                // constant progress updates
+                allfunction.loading();
+            });
+    };
 
 })
 
-.controller('AllUsersCtrl', function($scope, $stateParams, $state) {
+.controller('AllUsersCtrl', function($scope, $stateParams, $state, MyServices, $ionicLoading) {
 
-    $scope.allUsers = [{
-        name: "John Adams",
-        age: "23 yrs",
-        bloodgrp: "O+",
-        contact: "+91 9877899877",
-        image: "img/user.jpg",
-        earimg: "img/ear3.jpg"
-    }, {
-        name: "Alyssa Faith",
-        age: "20 yrs",
-        bloodgrp: "B+",
-        contact: "+91 9877899877",
-        image: "img/user2.jpg",
-        earimg: "img/ear1.jpg"
-    }, {
-        name: "Peter Wilson",
-        age: "26 yrs",
-        bloodgrp: "AB+",
-        contact: "+91 9877899877",
-        image: "img/user3.jpg",
-        earimg: "img/ear2.jpeg"
-    }];
+    allfunction.loading();
+    MyServices.findUsers(function(data) {
+        $ionicLoading.hide();
+        if (data.value != false) {
+            $scope.allUsers = data;
+        } else {
+            $scope.allUsers = [];
+        }
+    });
+
+    // $scope.allUsers = [{
+    //     name: "John Adams",
+    //     age: "23 yrs",
+    //     bloodgrp: "O+",
+    //     contact: "+91 9877899877",
+    //     image: "img/user.jpg",
+    //     earimg: "img/ear3.jpg"
+    // }, {
+    //     name: "Alyssa Faith",
+    //     age: "20 yrs",
+    //     bloodgrp: "B+",
+    //     contact: "+91 9877899877",
+    //     image: "img/user2.jpg",
+    //     earimg: "img/ear1.jpg"
+    // }, {
+    //     name: "Peter Wilson",
+    //     age: "26 yrs",
+    //     bloodgrp: "AB+",
+    //     contact: "+91 9877899877",
+    //     image: "img/user3.jpg",
+    //     earimg: "img/ear2.jpeg"
+    // }];
 
 });

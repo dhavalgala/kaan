@@ -1,14 +1,23 @@
 <ion-view view-title="Users">
     <ion-content>
-        <div class="list">
+        <div class="list" ng-if="allUsers.length>0">
             <a class="item item-thumbnail-left" href="" ng-repeat="user in allUsers">
-                <img ng-src="{{user.image}}">
+                <img ng-src="{{user.profilepic | uploadpathprofile}}" ng-if="user.profilepic">
+                <img ng-src="img/defaultuser.png" ng-if="!user.profilepic">
                 <h2>{{user.name}}</h2>
-                <p>{{user.age}}</p>
+                <p>{{user.age}}
+                    yrs</p>
                 <p>{{user.bloodgrp}}</p>
-                <p>{{user.contact}}</p>
-                <img ng-src="{{user.earimg}}">
+                <p>+91
+                    {{user.contact}}</p>
+                <img ng-src="{{user.earimage | uploadpathear}}" ng-if="user.earimage">
+                <img ng-src="img/earid.png" ng-if="!user.earimage">
             </a>
         </div>
+        <ul class="list" ng-if="allUsers.length==0">
+            <li class="item text-center">
+                No Users Yet
+            </li>
+        </ul>
     </ion-content>
 </ion-view>

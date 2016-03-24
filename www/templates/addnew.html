@@ -2,28 +2,29 @@
     <ion-content>
         <div class="main-ear text-center">
             <div class="ear-div">
-                <img src="img/user.jpg" class="user-img">
+                <img ng-src="img/defaultuser.png" class="user-img" ng-if="!addUser.profilepic">
+                <img ng-src="{{addUser.profilepic | uploadpathprofile}}" class="user-img" ng-if="addUser.profilepic">
             </div>
-            <button class="button button-stable upload">
+            <button class="button button-stable upload" ng-click="uploadPic(1);">
                 Add Profile Picture
             </button>
         </div>
         <div class="ear-div">
-            <form ng-submit="doLogin()">
+            <form>
                 <div class="list">
                     <label class="item item-input item-floating-label">
                         <span class="input-label">Name</span>
-                        <input type="text" placeholder="Name">
+                        <input type="text" placeholder="Name" ng-model="addUser.name">
                     </label>
                     <label class="item item-input item-floating-label">
                         <span class="input-label">Age</span>
-                        <input type="tel" placeholder="Age">
+                        <input type="tel" placeholder="Age" ng-model="addUser.age">
                     </label>
                     <label class="item item-input item-select">
                         <div class="input-label">
                             Blood Group
                         </div>
-                        <select>
+                        <select ng-model="addUser.bloodgrp">
                             <option value="A+">A+</option>
                             <option value="A-">A-</option>
                             <option value="B+">B+</option>
@@ -36,18 +37,19 @@
                     </label>
                     <label class="item item-input item-floating-label">
                         <span class="input-label">Contact Number</span>
-                        <input type="tel" placeholder="Contact Number">
+                        <input type="tel" placeholder="Contact Number" ng-model="addUser.contact">
                     </label>
                     <div class="main-ear text-center">
                         <div class="ear-div">
-                            <img src="img/ear.jpg" class="ear-img">
+                            <img ng-src="img/earid.png" class="ear-img" ng-if="!addUser.earimage">
+                            <img ng-src="{{addUser.earimage | uploadpathear}}" class="ear-img" ng-if="addUser.earimage">
                         </div>
-                        <button class="button button-stable upload">
+                        <button class="button button-stable upload" ng-click="uploadPic(2);">
                             Add Ear Image
                         </button>
                     </div>
                     <label class="item" style="border:none;">
-                        <button class="button button-block button-stable">Submit User</button>
+                        <button class="button button-block button-stable" ng-click="saveUser();">Submit User</button>
                     </label>
                 </div>
             </form>

@@ -111,6 +111,12 @@ img.img-responsive {
   width: 100%;
   height: 100%; }
 
+.ng-invalid-required .ng-touched {
+  border-bottom: 2px solid #F00; }
+
+.ng-valid-required {
+  border: none !important; }
+
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/

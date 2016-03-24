@@ -2,19 +2,19 @@
     <div class="text-center login">
         <img src="img/earid.png" alt="">
     </div>
-    <form ng-submit="doLogin()">
+    <form ng-submit="doRegister()">
         <div class="list">
             <label class="item item-input item-floating-label">
                 <span class="input-label">Email</span>
-                <input type="email" placeholder="Email">
+                <input type="email" placeholder="Email" ng-model="register.email" required>
             </label>
             <label class="item item-input item-floating-label">
                 <span class="input-label">Password</span>
-                <input type="password" placeholder="Password">
+                <input type="password" placeholder="Password" ng-model="register.password" required>
             </label>
             <label class="item item-input item-floating-label">
                 <span class="input-label">Confirm Password</span>
-                <input type="password" placeholder="Confirm Password">
+                <input type="password" placeholder="Confirm Password" ng-model="register.cpassword" required>
             </label>
             <label class="item noborder">
                 <button class="button button-block button-stable">Register</button>

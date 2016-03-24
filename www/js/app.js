@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
 .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -18,11 +18,14 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         if (window.StatusBar) {
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
+            StatusBar.backgroundColorByHexString("#099FCA");
         }
     });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider) {
+    $httpProvider.defaults.withCredentials = true;
+    $ionicConfigProvider.views.maxCache(0);
     $stateProvider
 
         .state('app', {
@@ -75,4 +78,17 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/login');
-});
+})
+
+.filter('uploadpathprofile', function() {
+        return function(input) {
+            if (input)
+                return imgpath + input + "&path=profile";
+        };
+    })
+    .filter('uploadpathear', function() {
+        return function(input) {
+            if (input)
+                return imgpath + input + "&path=earImage";
+        };
+    });
