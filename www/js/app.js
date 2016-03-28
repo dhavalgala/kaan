@@ -77,18 +77,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
     });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/app/search');
 })
 
 .filter('uploadpathprofile', function() {
-        return function(input) {
-            if (input)
-                return imgpath + input + "&path=profile";
-        };
-    })
-    .filter('uploadpathear', function() {
-        return function(input) {
-            if (input)
-                return imgpath + input + "&path=earImage";
-        };
-    });
+    return function(input) {
+        if (input)
+            return imgpath + input + "&path=profileImage";
+    };
+})
+
+.filter('uploadpathcompare', function() {
+    return function(input) {
+        if (input)
+            return imgpath + input + "&path=earCompare";
+    };
+})
+
+.filter('uploadpathear', function() {
+    return function(input) {
+        if (input)
+            return imgpath + input + "&path=earImage";
+    };
+});

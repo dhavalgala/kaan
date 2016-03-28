@@ -1,21 +1,30 @@
 <ion-view view-title="Search">
-    <ion-content ng-init="details=false;">
+    <ion-content>
         <div class="main-ear text-center">
             <div class="ear-div">
-                <img ng-src="{{earImage}}" class="ear-img">
+                <img ng-src="{{search.image | uploadpathcompare}}" class="ear-img" ng-if="search.image">
+                <img ng-src="img/earid.png" class="ear-img" ng-if="!search.image">
             </div>
-            <button class="button button-block button-stable" ng-click="details=!details;captureImage();">
+            <button class="button button-block button-stable" ng-click="captureImage();">
                 Capture Image
             </button>
         </div>
-        <div class="list" ng-show="details">
+        <div class="list" ng-if="userData.name">
             <a class="item item-thumbnail-left" href="">
-                <img src="img/user.jpg">
-                <h2>John Adams</h2>
-                <p>24 yrs</p>
-                <p>O+</p>
-                <p>+91 9877899877</p>
+                <img ng-src="{{userData.profilepic | uploadpathprofile}}" ng-if="userData.profilepic">
+                <img ng-src="img/defaultuser.png" ng-if="!userData.profilepic">
+                <h2>{{userData.name}}</h2>
+                <p>{{userData.age}} yrs</p>
+                <p>{{userData.bloodgrp}}</p>
+                <p>+91 {{userData.contact}}</p>
+                <img ng-src="{{userData.earimage | uploadpathear}}" ng-if="userData.earimage">
+                <img ng-src="img/earid.png" ng-if="!userData.earimage">
             </a>
         </div>
+        <ul class="list" ng-show="noUsers">
+            <li class="item text-center">
+                No Users Found
+            </li>
+        </ul>
     </ion-content>
 </ion-view>

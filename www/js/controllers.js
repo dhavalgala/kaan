@@ -20,38 +20,118 @@ angular.module('starter.controllers', ['ngCordova'])
         });
         $timeout(function() {
             $ionicLoading.hide();
-        }, 10000);
+        }, 20000);
+    };
+
+    allfunction.loadingwohide = function() {
+        $ionicLoading.show({
+            template: '<ion-spinner class="spinner-positive"></ion-spinner>'
+        });
     };
 
 })
 
-.controller('SearchCtrl', function($scope, $cordovaCamera, $state) {
+.controller('SearchCtrl', function($scope, $stateParams, $state, $cordovaCamera, $cordovaFileTransfer, $ionicLoading, MyServices, $timeout, $ionicPopup, $ionicPlatform) {
+
+    $ionicPlatform.registerBackButtonAction(function(event) {
+        navigator.app.exitApp();
+    }, 100);
 
     if (!$.jStorage.get("user")) {
         $state.go("login");
     }
 
+    $scope.search = {};
     $scope.earImage = "img/earid.png";
 
+    function getResults(image) {
+        console.log("in get Results");
+        allfunction.loadingwohide();
+        MyServices.compare(image, function(data) {
+            if (data.value != false) {
+                allfunction.loadingwohide();
+                $scope.noUsers = false;
+                if (data.percentage && parseFloat(data.percentage) <= 15) {
+                    allfunction.loadingwohide();
+                    $scope.noUsers = false;
+                    $timeout(function() {
+                        MyServices.getOneUser(data.userid, function(userData) {
+                            $ionicLoading.hide();
+                            if (userData.value != false) {
+                                $scope.userData = userData;
+                                console.log(userData);
+                            }
+                        })
+                    }, 20000);
+                } else {
+                    $ionicLoading.hide();
+                    $scope.noUsers = true;
+                }
+            } else {
+                $ionicLoading.hide();
+                $scope.noUsers = true;
+            }
+        })
+    }
+    // getResults('361d0ad8-c68f-478a-b8b5-dcf9b733cd6a.jpg');
     $scope.captureImage = function() {
+        $scope.search = {};
+        $scope.userData = {};
         var options = {
             destinationType: Camera.DestinationType.FILE_URI,
-            sourceType: Camera.PictureSourceType.CAMERA,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY
         };
 
         $cordovaCamera.getPicture(options).then(function(imageURI) {
-            // var image = document.getElementById('myImage');
-            // image.src = imageURI;
+            // Success! Image data is here
             console.log(imageURI);
-            $scope.earImage = imageURI;
+            $scope.imagetobeup = imageURI;
+            $scope.uploadPhoto(adminurl + "image/upload", 'earCompare', imageURI, function(data) {
+                console.log(data);
+                console.log(JSON.parse(data.response));
+                var json = JSON.parse(data.response);
+                if (json.value != false) {
+                    $timeout(function() {
+                        $scope.search.image = json.files[0].fd;
+                        getResults($scope.search.image);
+                    }, 2000);
+                }
+            });
         }, function(err) {
-            // error
+            // An error occured. Show a message to the user
         });
     }
 
+    $scope.uploadPhoto = function(serverpath, uploadIn, imagetobeup, callback) {
+        console.log("function called");
+        var params = {};
+        params.path = uploadIn;
+
+        var options = {};
+        options.params = params;
+        $cordovaFileTransfer.upload(serverpath, imagetobeup, options)
+            .then(function(result) {
+                console.log(result);
+                callback(result);
+                $ionicLoading.hide();
+                //$scope.addretailer.store_image = $scope.filename2;
+            }, function(err) {
+                // Error
+                console.log(err);
+            }, function(progress) {
+                // constant progress updates
+                allfunction.loading();
+            });
+    };
+
 })
 
-.controller('LoginCtrl', function($scope, $stateParams, $state, $ionicPopup, $timeout, $ionicLoading, MyServices) {
+.controller('LoginCtrl', function($scope, $stateParams, $state, $ionicPopup, $timeout, $ionicLoading, MyServices, $ionicPlatform) {
+
+    $ionicPlatform.registerBackButtonAction(function(event) {
+        console.log("back pressed = " + $state.current.name);
+        navigator.app.exitApp();
+    }, 100);
 
     $scope.register = {};
     $scope.login = {};
@@ -61,15 +141,8 @@ angular.module('starter.controllers', ['ngCordova'])
         MyServices.login($scope.login, function(data) {
             $ionicLoading.hide();
             if (data.value != false) {
-                var myPopup = $ionicPopup.show({
-                    template: '<p class="text-center">Login Successfull</p>',
-                    title: 'Success'
-                });
-                $timeout(function() {
-                    myPopup.close(); //close the popup after 3 seconds for some reason
-                    $.jStorage.set("user", data);
-                    $state.go("app.search");
-                }, 3000);
+                $.jStorage.set("user", data);
+                $state.go("app.search");
             } else {
                 var myPopup = $ionicPopup.show({
                     template: '<p class="text-center">Invalid login credentials</p>',
@@ -147,19 +220,19 @@ angular.module('starter.controllers', ['ngCordova'])
         var options = {};
         var uploadIn = "";
         if (whichone == 1) {
-            uploadIn = "profile";
+            uploadIn = "profileImage";
             options.destinationType = Camera.DestinationType.FILE_URI;
             options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
         } else if (whichone == 2) {
             uploadIn = "earImage";
             options.destinationType = Camera.DestinationType.FILE_URI;
-            options.sourceType = Camera.PictureSourceType.CAMERA;
+            options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
         }
         $cordovaCamera.getPicture(options).then(function(imageURI) {
             // Success! Image data is here
             console.log(imageURI);
             $scope.imagetobeup = imageURI;
-            $scope.uploadPhoto(adminurl + "image/upload", uploadIn, function(data) {
+            $scope.uploadPhoto(adminurl + "image/upload", uploadIn, imageURI, function(data) {
                 console.log(data);
                 console.log(JSON.parse(data.response));
                 var json = JSON.parse(data.response);
@@ -176,14 +249,14 @@ angular.module('starter.controllers', ['ngCordova'])
         });
     }
 
-    $scope.uploadPhoto = function(serverpath, uploadIn, callback) {
+    $scope.uploadPhoto = function(serverpath, uploadIn, imagetobeup, callback) {
         console.log("function called");
         var params = {};
         params.path = uploadIn;
 
         var options = {};
         options.params = params;
-        $cordovaFileTransfer.upload(serverpath, $scope.imagetobeup, options)
+        $cordovaFileTransfer.upload(serverpath, imagetobeup, options)
             .then(function(result) {
                 console.log(result);
                 callback(result);

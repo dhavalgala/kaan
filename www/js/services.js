@@ -46,6 +46,18 @@ angular.module('starter.services', [])
                 data: data
             }).success(callback);
         },
+        compare: function(image, callback) {
+            $http.get(adminurl + 'image/compare?file=' + image).success(callback);
+        },
+        getOneUser: function(userid, callback) {
+            $http({
+                url: adminurl + 'image/findOne',
+                method: 'POST',
+                data: {
+                    "_id": userid
+                }
+            }).success(callback);
+        },
         setNotify: function(data) {
             $.jStorage.set("notify", data);
         },
