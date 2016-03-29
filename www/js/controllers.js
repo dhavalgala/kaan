@@ -51,10 +51,11 @@ angular.module('starter.controllers', ['ngCordova'])
             if (data.value != false) {
                 allfunction.loadingwohide();
                 $scope.noUsers = false;
-                if (data.percentage && parseFloat(data.percentage) <= 15) {
+                if (data.percentage && parseFloat(data.percentage) <= 20) {
                     allfunction.loadingwohide();
                     $scope.noUsers = false;
                     $timeout(function() {
+                        $scope.search.image = image;
                         MyServices.getOneUser(data.userid, function(userData) {
                             $ionicLoading.hide();
                             if (userData.value != false) {
@@ -62,14 +63,21 @@ angular.module('starter.controllers', ['ngCordova'])
                                 console.log(userData);
                             }
                         })
-                    }, 20000);
+                    }, 13000);
                 } else {
-                    $ionicLoading.hide();
-                    $scope.noUsers = true;
+                    $timeout(function() {
+                        $scope.search.image = image;
+                        $ionicLoading.hide();
+                        $scope.noUsers = true;
+                    }, 13000);
                 }
             } else {
-                $ionicLoading.hide();
-                $scope.noUsers = true;
+                $scope.search.image = image;
+                $timeout(function() {
+                    $scope.search.image = image;
+                    $ionicLoading.hide();
+                    $scope.noUsers = true;
+                }, 13000);
             }
         })
     }
@@ -79,7 +87,7 @@ angular.module('starter.controllers', ['ngCordova'])
         $scope.userData = {};
         var options = {
             destinationType: Camera.DestinationType.FILE_URI,
-            sourceType: Camera.PictureSourceType.PHOTOLIBRARY
+            sourceType: Camera.PictureSourceType.CAMERA
         };
 
         $cordovaCamera.getPicture(options).then(function(imageURI) {
@@ -92,8 +100,7 @@ angular.module('starter.controllers', ['ngCordova'])
                 var json = JSON.parse(data.response);
                 if (json.value != false) {
                     $timeout(function() {
-                        $scope.search.image = json.files[0].fd;
-                        getResults($scope.search.image);
+                        getResults(json.files[0].fd);
                     }, 2000);
                 }
             });
@@ -104,6 +111,7 @@ angular.module('starter.controllers', ['ngCordova'])
 
     $scope.uploadPhoto = function(serverpath, uploadIn, imagetobeup, callback) {
         console.log("function called");
+        allfunction.loadingwohide();
         var params = {};
         params.path = uploadIn;
 
@@ -120,7 +128,6 @@ angular.module('starter.controllers', ['ngCordova'])
                 console.log(err);
             }, function(progress) {
                 // constant progress updates
-                allfunction.loading();
             });
     };
 
@@ -226,7 +233,7 @@ angular.module('starter.controllers', ['ngCordova'])
         } else if (whichone == 2) {
             uploadIn = "earImage";
             options.destinationType = Camera.DestinationType.FILE_URI;
-            options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+            options.sourceType = Camera.PictureSourceType.CAMERA;
         }
         $cordovaCamera.getPicture(options).then(function(imageURI) {
             // Success! Image data is here
@@ -251,6 +258,7 @@ angular.module('starter.controllers', ['ngCordova'])
 
     $scope.uploadPhoto = function(serverpath, uploadIn, imagetobeup, callback) {
         console.log("function called");
+        allfunction.loadingwohide();
         var params = {};
         params.path = uploadIn;
 
@@ -267,7 +275,6 @@ angular.module('starter.controllers', ['ngCordova'])
                 console.log(err);
             }, function(progress) {
                 // constant progress updates
-                allfunction.loading();
             });
     };
 
