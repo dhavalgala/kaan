@@ -63,13 +63,13 @@ angular.module('starter.controllers', ['ngCordova'])
                                 console.log(userData);
                             }
                         })
-                    }, 13000);
+                    }, 20000);
                 } else {
                     $timeout(function() {
                         $scope.search.image = image;
                         $ionicLoading.hide();
                         $scope.noUsers = true;
-                    }, 13000);
+                    }, 20000);
                 }
             } else {
                 $scope.search.image = image;
@@ -77,7 +77,7 @@ angular.module('starter.controllers', ['ngCordova'])
                     $scope.search.image = image;
                     $ionicLoading.hide();
                     $scope.noUsers = true;
-                }, 13000);
+                }, 20000);
             }
         })
     }
