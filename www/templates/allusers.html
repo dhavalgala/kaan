@@ -1,7 +1,7 @@
 <ion-view view-title="Users">
     <ion-content>
-        <div class="list" ng-if="allUsers.length>0">
-            <a class="item item-thumbnail-left" href="" ng-repeat="user in allUsers">
+        <ion-list class="list" ng-if="allUsers.length>0">
+            <ion-item class="item item-thumbnail-left" ng-repeat="user in allUsers">
                 <img ng-src="{{user.profilepic | uploadpathprofile}}" ng-if="user.profilepic">
                 <img ng-src="img/defaultuser.png" ng-if="!user.profilepic">
                 <h2>{{user.name}}</h2>
@@ -12,8 +12,11 @@
                     {{user.contact}}</p>
                 <img ng-src="{{user.earimage | uploadpathear}}" ng-if="user.earimage">
                 <img ng-src="img/earid.png" ng-if="!user.earimage">
-            </a>
-        </div>
+                <ion-option-button class="button-assertive" ng-click="edit(item)">
+                    Delete
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
         <ul class="list" ng-if="allUsers.length==0">
             <li class="item text-center">
                 No Users Yet

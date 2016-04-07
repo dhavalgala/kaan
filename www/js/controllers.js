@@ -282,37 +282,37 @@ angular.module('starter.controllers', ['ngCordova'])
 
 .controller('AllUsersCtrl', function($scope, $stateParams, $state, MyServices, $ionicLoading) {
 
-    allfunction.loading();
-    MyServices.findUsers(function(data) {
-        $ionicLoading.hide();
-        if (data.value != false) {
-            $scope.allUsers = data;
-        } else {
-            $scope.allUsers = [];
-        }
-    });
+    // allfunction.loading();
+    // MyServices.findUsers(function(data) {
+    //     $ionicLoading.hide();
+    //     if (data.value != false) {
+    //         $scope.allUsers = data;
+    //     } else {
+    //         $scope.allUsers = [];
+    //     }
+    // });
 
-    // $scope.allUsers = [{
-    //     name: "John Adams",
-    //     age: "23 yrs",
-    //     bloodgrp: "O+",
-    //     contact: "+91 9877899877",
-    //     image: "img/user.jpg",
-    //     earimg: "img/ear3.jpg"
-    // }, {
-    //     name: "Alyssa Faith",
-    //     age: "20 yrs",
-    //     bloodgrp: "B+",
-    //     contact: "+91 9877899877",
-    //     image: "img/user2.jpg",
-    //     earimg: "img/ear1.jpg"
-    // }, {
-    //     name: "Peter Wilson",
-    //     age: "26 yrs",
-    //     bloodgrp: "AB+",
-    //     contact: "+91 9877899877",
-    //     image: "img/user3.jpg",
-    //     earimg: "img/ear2.jpeg"
-    // }];
+    $scope.allUsers = [{
+        name: "John Adams",
+        age: "23 yrs",
+        bloodgrp: "O+",
+        contact: "+91 9877899877",
+        image: "img/user.jpg",
+        earimg: "img/ear3.jpg"
+    }, {
+        name: "Alyssa Faith",
+        age: "20 yrs",
+        bloodgrp: "B+",
+        contact: "+91 9877899877",
+        image: "img/user2.jpg",
+        earimg: "img/ear1.jpg"
+    }, {
+        name: "Peter Wilson",
+        age: "26 yrs",
+        bloodgrp: "AB+",
+        contact: "+91 9877899877",
+        image: "img/user3.jpg",
+        earimg: "img/ear2.jpeg"
+    }];
 
 });
