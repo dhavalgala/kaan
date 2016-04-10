@@ -75,6 +75,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 controller: 'AddNewCtrl'
             }
         }
+    })
+
+    .state('app.addnewedit', {
+        url: '/addnew/:id',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/addnew.html',
+                controller: 'AddNewCtrl'
+            }
+        }
     });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/search');

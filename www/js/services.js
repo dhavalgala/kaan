@@ -1,7 +1,7 @@
 // var adminurl = "http://localhost:1337/";
 // var adminurl = "http://192.168.0.122:82/";
 // var adminurl = "http://192.168.0.126/";
-var adminurl = "http://130.211.164.166:81/";
+var adminurl = "http://104.197.184.204:81/";
 var imgpath = adminurl + "image/resize?file=";
 
 angular.module('starter.services', [])
@@ -24,6 +24,15 @@ angular.module('starter.services', [])
                 url: adminurl + 'image/save',
                 method: 'POST',
                 data: data
+            }).success(callback);
+        },
+        deleteUser: function(id, callback) {
+            $http({
+                url: adminurl + 'image/delete',
+                method: 'POST',
+                data: {
+                    "_id": id
+                }
             }).success(callback);
         },
         findUsers: function(callback) {

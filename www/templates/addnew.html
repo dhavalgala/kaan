@@ -49,7 +49,8 @@
                         </a>
                     </div>
                     <label class="item" style="border:none;">
-                        <button type="submit" class="button button-block button-stable">Submit User</button>
+                        <button type="submit" class="button button-block button-stable" ng-hide="showUpdate">Submit User</button>
+                        <button type="submit" class="button button-block button-stable" ng-show="showUpdate">Update User</button>
                     </label>
                 </div>
             </form>

@@ -117,6 +117,13 @@ img.img-responsive {
 .ng-valid-required {
   border: none !important; }
 
+button.button.ng-binding.button-default {
+  background-color: #017CBB;
+  color: white; }
+
+button.button.ng-binding.button-positive {
+  background-color: #EF473A; }
+
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/

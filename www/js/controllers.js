@@ -207,7 +207,21 @@ angular.module('starter.controllers', ['ngCordova'])
 
 .controller('AddNewCtrl', function($scope, $stateParams, $state, $cordovaCamera, $cordovaFileTransfer, $ionicLoading, MyServices) {
 
-    $scope.addUser = {};
+    if ($stateParams.id) {
+        $scope.showUpdate = true;
+        allfunction.loading();
+        MyServices.getOneUser($stateParams.id, function(data) {
+            $ionicLoading.hide();
+            if (data.value != false) {
+                $scope.addUser = data;
+            } else {
+                $scope.addUser = {};
+            }
+        })
+    } else {
+        $scope.showUpdate = false;
+        $scope.addUser = {};
+    }
     // $scope.addUser.earimage = "f4f184ad-7b05-4298-baa2-74e4febeb7df.jpg";
     // $scope.addUser.profilepic = "7ad375e9-a280-47fb-ad93-5bb944159e37.jpg";
 
@@ -217,7 +231,12 @@ angular.module('starter.controllers', ['ngCordova'])
         MyServices.saveUser($scope.addUser, function(data) {
             $ionicLoading.hide();
             if (data.value != false) {
-                allfunction.msg("User Added Successfully", "Add User");
+                if ($scope.showUpdate) {
+                    allfunction.msg("User Updated Successfully", "Update User");
+                    $state.go("app.allusers");
+                } else {
+                    allfunction.msg("User Added Successfully", "Add User");
+                }
                 $scope.addUser = {};
             }
         });
@@ -280,39 +299,63 @@ angular.module('starter.controllers', ['ngCordova'])
 
 })
 
-.controller('AllUsersCtrl', function($scope, $stateParams, $state, MyServices, $ionicLoading) {
+.controller('AllUsersCtrl', function($scope, $stateParams, $state, MyServices, $ionicLoading, $ionicPopup) {
 
-    // allfunction.loading();
-    // MyServices.findUsers(function(data) {
-    //     $ionicLoading.hide();
-    //     if (data.value != false) {
-    //         $scope.allUsers = data;
-    //     } else {
-    //         $scope.allUsers = [];
-    //     }
-    // });
+    $scope.getAllUsers = function() {
+        allfunction.loading();
+        MyServices.findUsers(function(data) {
+            $ionicLoading.hide();
+            if (data.value != false) {
+                $scope.allUsers = data;
+            } else {
+                $scope.allUsers = [];
+            }
+        });
+    }
+    $scope.getAllUsers();
 
-    $scope.allUsers = [{
-        name: "John Adams",
-        age: "23 yrs",
-        bloodgrp: "O+",
-        contact: "+91 9877899877",
-        image: "img/user.jpg",
-        earimg: "img/ear3.jpg"
-    }, {
-        name: "Alyssa Faith",
-        age: "20 yrs",
-        bloodgrp: "B+",
-        contact: "+91 9877899877",
-        image: "img/user2.jpg",
-        earimg: "img/ear1.jpg"
-    }, {
-        name: "Peter Wilson",
-        age: "26 yrs",
-        bloodgrp: "AB+",
-        contact: "+91 9877899877",
-        image: "img/user3.jpg",
-        earimg: "img/ear2.jpeg"
-    }];
+    $scope.deleteUser = function(id) {
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Delete User',
+            template: 'Are you sure you want to delete?'
+        });
+
+        confirmPopup.then(function(res) {
+            if (res) {
+                console.log('Delete');
+                allfunction.loading();
+                MyServices.deleteUser(id, function(data) {
+                    if (data.value) {
+                        $scope.getAllUsers();
+                    }
+                });
+            } else {
+                console.log("Don't Delete");
+            }
+        });
+    }
+
+    // $scope.allUsers = [{
+    //     name: "John Adams",
+    //     age: "23 yrs",
+    //     bloodgrp: "O+",
+    //     contact: "+91 9877899877",
+    //     image: "img/user.jpg",
+    //     earimg: "img/ear3.jpg"
+    // }, {
+    //     name: "Alyssa Faith",
+    //     age: "20 yrs",
+    //     bloodgrp: "B+",
+    //     contact: "+91 9877899877",
+    //     image: "img/user2.jpg",
+    //     earimg: "img/ear1.jpg"
+    // }, {
+    //     name: "Peter Wilson",
+    //     age: "26 yrs",
+    //     bloodgrp: "AB+",
+    //     contact: "+91 9877899877",
+    //     image: "img/user3.jpg",
+    //     earimg: "img/ear2.jpeg"
+    // }];
 
 });

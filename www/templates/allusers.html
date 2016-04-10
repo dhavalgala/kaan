@@ -12,7 +12,10 @@
                     {{user.contact}}</p>
                 <img ng-src="{{user.earimage | uploadpathear}}" ng-if="user.earimage">
                 <img ng-src="img/earid.png" ng-if="!user.earimage">
-                <ion-option-button class="button-assertive" ng-click="edit(item)">
+                <ion-option-button class="button-positive" ui-sref="app.addnewedit({id:user._id})">
+                    Edit
+                </ion-option-button>
+                <ion-option-button class="button-assertive" ng-click="deleteUser(user._id);">
                     Delete
                 </ion-option-button>
             </ion-item>
